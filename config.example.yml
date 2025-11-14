@@ -1,0 +1,16 @@
+email:
+  address: sean.jobs@ecoworks.ca
+  labels:
+  - INBOX
+  check_interval: 300
+api:
+  anthropic_key: your-api-key-here
+templates:
+  resume: templates/resume.txt
+  cover_letter: templates/cover_letter_template.txt
+output:
+  directory: output
+  format: pdf
+logging:
+  level: INFO
+  file: logs/job_automation.log
