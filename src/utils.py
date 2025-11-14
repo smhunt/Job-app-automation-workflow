@@ -88,9 +88,17 @@ def validate_config(config: Dict[str, Any]) -> bool:
     if 'address' not in config['email']:
         raise ValueError("Email address not configured")
 
-    # Validate API config
-    if 'anthropic_key' not in config['api']:
-        raise ValueError("Anthropic API key not configured")
+    # Validate API config - check for at least one provider
+    provider = config['api'].get('provider', 'anthropic').lower()
+
+    if provider == 'anthropic':
+        if 'anthropic_key' not in config['api'] or not config['api']['anthropic_key'] or config['api']['anthropic_key'] == 'your-anthropic-api-key-here':
+            raise ValueError("Anthropic API key not configured or still has default value")
+    elif provider == 'openai':
+        if 'openai_key' not in config['api'] or not config['api']['openai_key'] or config['api']['openai_key'] == 'your-openai-api-key-here':
+            raise ValueError("OpenAI API key not configured or still has default value")
+    else:
+        raise ValueError(f"Invalid API provider: {provider}. Must be 'anthropic' or 'openai'")
 
     # Validate template paths
     if 'resume' not in config['templates']:
@@ -116,7 +124,11 @@ def create_default_config(output_path: str = 'config.example.yml'):
             'check_interval': 300  # seconds
         },
         'api': {
-            'anthropic_key': 'your-api-key-here'
+            'provider': 'openai',  # or 'anthropic'
+            'anthropic_key': 'your-anthropic-api-key-here',
+            'openai_key': 'your-openai-api-key-here',
+            'openai_model': 'gpt-4o',
+            'use_batch': False
         },
         'templates': {
             'resume': 'templates/resume.txt',

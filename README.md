@@ -5,10 +5,12 @@ Automated job application system that monitors your email (sean.jobs@ecoworks.ca
 ## Features
 
 - 📧 **Email Monitoring**: Automatically monitors Gmail inbox for job postings
-- 🤖 **AI-Powered Customization**: Uses Claude API to tailor your resume and cover letter
+- 🤖 **AI-Powered Customization**: Uses Claude or GPT-4 to tailor your resume and cover letter
+- 💰 **Cost Optimization**: OpenAI Batch API support for 50% cost savings
 - 🔍 **Gap Analysis**: Identifies skill/experience gaps and suggests strategies
 - 📝 **Application Package**: Generates customized application materials
 - ⚡ **Easy Application**: Provides streamlined application instructions
+- 📊 **Multiple Providers**: Switch between Anthropic (Claude) and OpenAI (GPT-4)
 
 ## Quick Start
 
@@ -16,7 +18,10 @@ Automated job application system that monitors your email (sean.jobs@ecoworks.ca
 
 - Python 3.8+
 - Gmail account (sean.jobs@ecoworks.ca)
-- Anthropic API key (for Claude AI)
+- AI Provider API key:
+  - Anthropic API key (for Claude) **OR**
+  - OpenAI API key (for GPT-4)
+  - See [PRICING.md](PRICING.md) for cost comparison
 
 ### Installation
 
@@ -90,10 +95,19 @@ Edit `config.yml`:
 ```yaml
 email:
   address: "sean.jobs@ecoworks.ca"
-  labels: ["Jobs", "INBOX"]  # Gmail labels to monitor
+  labels: ["Jobs", "INBOX"]
 
 api:
-  anthropic_key: "your-api-key-here"
+  # Choose provider: 'anthropic' or 'openai'
+  provider: openai
+
+  # OpenAI (recommended for cost)
+  openai_key: "your-openai-key"
+  openai_model: "gpt-4o-mini"  # or gpt-4o
+  use_batch: true  # 50% cost savings!
+
+  # OR Anthropic (premium quality)
+  anthropic_key: "your-anthropic-key"
 
 templates:
   resume: "templates/resume.txt"
@@ -101,7 +115,24 @@ templates:
 
 output:
   directory: "output"
-  format: "pdf"  # pdf or docx
+  format: "pdf"
+```
+
+### Cost Comparison
+
+See [PRICING.md](PRICING.md) for detailed cost analysis.
+
+**Quick comparison per job:**
+- GPT-4o-mini (batch): $0.04 ⭐ Best value
+- GPT-4o (batch): $0.21
+- Claude Sonnet: $0.60
+
+```bash
+# View cost comparison
+python src/cost_tracker.py --compare
+
+# Get recommendation for your budget
+python src/cost_tracker.py --budget 10 --applications 25
 ```
 
 ## Output

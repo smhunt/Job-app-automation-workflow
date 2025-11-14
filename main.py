@@ -14,6 +14,7 @@ from typing import Optional
 from src.email_monitor import EmailMonitor
 from src.job_parser import JobParser
 from src.ai_customizer import AICustomizer
+from src.openai_customizer import OpenAICustomizer
 from src.gap_analyzer import GapAnalyzer
 from src.package_generator import PackageGenerator
 from src.utils import (
@@ -53,9 +54,25 @@ class JobApplicationAutomation:
         # Initialize components
         self.email_monitor = EmailMonitor()
         self.job_parser = JobParser()
-        self.ai_customizer = AICustomizer(
-            api_key=self.config['api']['anthropic_key']
-        )
+
+        # Initialize AI provider based on config
+        provider = self.config['api'].get('provider', 'anthropic').lower()
+        if provider == 'openai':
+            use_batch = self.config['api'].get('use_batch', False)
+            model = self.config['api'].get('openai_model', 'gpt-4o')
+            self.ai_customizer = OpenAICustomizer(
+                api_key=self.config['api'].get('openai_key'),
+                use_batch=use_batch
+            )
+            self.ai_customizer.model = model
+            mode = "batch (50% off)" if use_batch else "real-time"
+            logger.info(f"Using OpenAI provider: {model} in {mode} mode")
+        else:
+            self.ai_customizer = AICustomizer(
+                api_key=self.config['api'].get('anthropic_key')
+            )
+            logger.info("Using Anthropic provider (Claude)")
+
         self.gap_analyzer = GapAnalyzer()
         self.package_generator = PackageGenerator(
             output_dir=self.config['output']['directory']

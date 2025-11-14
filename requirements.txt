@@ -4,8 +4,12 @@ google-auth-oauthlib==1.1.0
 google-auth-httplib2==0.1.1
 google-api-python-client==2.108.0
 
+# AI Providers
 # Anthropic Claude API
 anthropic==0.34.0
+
+# OpenAI API (GPT-4)
+openai==1.51.0
 
 # Configuration
 PyYAML==6.0.1
